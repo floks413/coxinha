@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class ProdutosDAO {
     
-    Connection conn;
     PreparedStatement prep;
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();

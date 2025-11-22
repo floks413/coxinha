@@ -20,50 +20,62 @@ public class ProdutosDAO {
     PreparedStatement prep;
     ResultSet resultset;
 
-    private static final List<ProdutosDTO> listagem = new ArrayList<>();
+    public List<ProdutosDTO> Listar() {
+        List<ProdutosDTO> lista = new ArrayList<>();
+        String sql = "SELECT * FROM produtos";
 
-    public static List<ProdutosDTO> Listar() {
-        return listagem;
-    }
+        conectaDAO cn = new conectaDAO();
+        if (cn.connectDB()) {
+            Connection con = cn.conn;
 
-    public static void Adicionar(ProdutosDTO nome) {
-        listagem.add(nome);
-    }
+            try (PreparedStatement prep = con.prepareStatement(sql); ResultSet rs = prep.executeQuery()) {
 
-    public List<ProdutosDTO> listarProdutos() {
+                while (rs.next()) {
+                    ProdutosDTO p = new ProdutosDTO();
+                    p.setId(rs.getInt("id"));
+                    p.setNome(rs.getString("nome"));
+                    p.setValor(rs.getInt("valor"));
+                    p.setStatus(rs.getString("status"));
+                    lista.add(p);
+                }
 
-        return listagem;
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        System.out.println("Produtos encontrados: " + lista.size());
+        return lista;
     }
 
     public void cadastrar(ProdutosDTO p) {
         String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
 
         conectaDAO cn = new conectaDAO();
-        if (cn.connectDB()) { 
+        if (cn.connectDB()) {
             Connection con = cn.conn;
-        
-        try (PreparedStatement prep = con.prepareStatement(sql)) {
 
-            con.setAutoCommit(false);
+            try (PreparedStatement prep = con.prepareStatement(sql)) {
 
-            prep.setString(1, p.getNome());
-            prep.setInt(2, p.getValor());
-            prep.setString(3, p.getStatus());
+                con.setAutoCommit(false);
 
-            prep.executeUpdate();
-            con.commit();
-            JOptionPane.showMessageDialog(null,"Produto cadastrado com sucesso!");
+                prep.setString(1, p.getNome());
+                prep.setInt(2, p.getValor());
+                prep.setString(3, p.getStatus());
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            try {
-                if (con != null) {
-                    con.rollback();
+                prep.executeUpdate();
+                con.commit();
+                JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                try {
+                    if (con != null) {
+                        con.rollback();
+                    }
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
                 }
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
             }
-        }
         } else {
             System.out.println("Falha ao conectar ao banco!");
         }

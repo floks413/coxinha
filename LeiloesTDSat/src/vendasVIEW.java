@@ -33,7 +33,7 @@ public class vendasVIEW extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
         listaVendidos = new javax.swing.JTable();
         voltarbtn = new javax.swing.JButton();
 
@@ -50,7 +50,7 @@ public class vendasVIEW extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "Valor", "Status"
             }
         ));
         jScrollPane1.setViewportView(listaVendidos);
@@ -175,7 +175,6 @@ public class vendasVIEW extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable listaVendidos;
     private javax.swing.JButton voltarbtn;
     // End of variables declaration//GEN-END:variables

@@ -123,6 +123,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="listagemVIEW_listaProdutos"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

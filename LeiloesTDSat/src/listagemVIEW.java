@@ -1,6 +1,6 @@
 
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -139,18 +139,40 @@ public class listagemVIEW extends javax.swing.JFrame {
         String id = id_produto_venda.getText();
 
         ProdutosDAO produtosdao = new ProdutosDAO();
+        List<ProdutosDTO> lista = produtosdao.Listar();
 
-        if (produtosdao.venderProduto(Integer.parseInt(id))) {
-            System.out.println("Produto vendido com sucesso!");
-        } else {
-            System.out.println("Produto não encontrado ou erro na venda.");
+        ProdutosDTO produtoEncontrado = null;
+
+        for (ProdutosDTO p : lista) {
+            if (p.getId() == Integer.parseInt(id)) {
+                produtoEncontrado = p;
+                break;
+            }
         }
-        
-        listarProdutos();
+
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor preencha o cmapo de ID.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else if (id.matches(".*[a-zA-Z].*")) {
+            JOptionPane.showMessageDialog(null, "Por favor digite um ID de produto no campo de digitação.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            if (produtoEncontrado.getStatus().equalsIgnoreCase("Vendido")) {
+                JOptionPane.showMessageDialog(null, "Esse produto já foi vendido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else {
+                if (produtosdao.venderProduto(Integer.parseInt(id))) {
+                    JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Produto não encontrado ou erro na venda.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+                listarProdutos();
+            }
+        }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        vendasVIEW vendas = new vendasVIEW(); 
+        vendasVIEW vendas = new vendasVIEW();
         vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 

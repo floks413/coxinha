@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Adm
@@ -138,10 +137,15 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
-        
+
         ProdutosDAO produtosdao = new ProdutosDAO();
+
+        if (produtosdao.venderProduto(Integer.parseInt(id))) {
+            System.out.println("Produto vendido com sucesso!");
+        } else {
+            System.out.println("Produto não encontrado ou erro na venda.");
+        }
         
-        //produtosdao.venderProduto(Integer.parseInt(id));
         listarProdutos();
     }//GEN-LAST:event_btnVenderActionPerformed
 
@@ -203,25 +207,25 @@ public class listagemVIEW extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarProdutos() {
-    try {
-        ProdutosDAO produtosdao = new ProdutosDAO();
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
 
-        DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
-        model.setNumRows(0);
+            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+            model.setNumRows(0);
 
-        List<ProdutosDTO> listagem = produtosdao.Listar();
+            List<ProdutosDTO> listagem = produtosdao.Listar();
 
-        for (ProdutosDTO p : listagem) {
-            model.addRow(new Object[]{
-                p.getId(),
-                p.getNome(),
-                p.getValor(),
-                p.getStatus()
-            });
+            for (ProdutosDTO p : listagem) {
+                model.addRow(new Object[]{
+                    p.getId(),
+                    p.getNome(),
+                    p.getValor(),
+                    p.getStatus()
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(); // mostra qualquer erro
         }
-
-    } catch (Exception e) {
-        e.printStackTrace(); // mostra qualquer erro
     }
-}
 }

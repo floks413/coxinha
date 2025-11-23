@@ -150,10 +150,8 @@ public class listagemVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
-        ProdutosDAO d = new ProdutosDAO();
-        d.listarProdutosVendidos();
+        vendasVIEW vendas = new vendasVIEW(); 
+        vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -227,7 +225,7 @@ public class listagemVIEW extends javax.swing.JFrame {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // mostra qualquer erro
+            e.printStackTrace();
         }
     }
 }

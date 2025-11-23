@@ -122,7 +122,6 @@ public class ProdutosDAO {
             ex.printStackTrace();
         }
     }
-    System.out.println("Vendidos: " + vendidos.size());
     return vendidos ;
 }
 }

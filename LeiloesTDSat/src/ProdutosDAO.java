@@ -17,9 +17,6 @@ import java.util.List;
 
 public class ProdutosDAO {
 
-    PreparedStatement prep;
-    ResultSet resultset;
-
     public List<ProdutosDTO> Listar() {
         List<ProdutosDTO> lista = new ArrayList<>();
         String sql = "SELECT * FROM produtos";
@@ -43,7 +40,6 @@ public class ProdutosDAO {
                 ex.printStackTrace();
             }
         }
-        System.out.println("Produtos encontrados: " + lista.size());
         return lista;
     }
 
@@ -81,4 +77,51 @@ public class ProdutosDAO {
         }
     }
 
+    public boolean venderProduto(int id) {
+        String sql = "UPDATE produtos SET status = 'vendido' WHERE id = ?";
+
+        conectaDAO cn = new conectaDAO();
+        if (cn.connectDB()) {
+            Connection con = cn.conn;
+            try (PreparedStatement prep = con.prepareStatement(sql)) {
+
+                prep.setInt(1, id);
+                int linhas = prep.executeUpdate();
+
+                return linhas > 0;
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public List<ProdutosDTO> listarProdutosVendidos() {
+        List<ProdutosDTO> vendidos = new ArrayList<>();
+    String sql = "SELECT * FROM produtos where status = 'vendido'";
+
+    conectaDAO cn = new conectaDAO();
+
+    if (cn.connectDB ()) {
+            Connection con = cn.conn;
+
+        try (PreparedStatement prep = con.prepareStatement(sql); ResultSet rs = prep.executeQuery()) {
+
+            while (rs.next()) {
+                ProdutosDTO p = new ProdutosDTO();
+                p.setId(rs.getInt("id"));
+                p.setNome(rs.getString("nome"));
+                p.setValor(rs.getInt("valor"));
+                p.setStatus(rs.getString("status"));
+                vendidos.add(p);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    return vendidos ;
+}
 }

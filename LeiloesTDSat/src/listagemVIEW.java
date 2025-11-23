@@ -1,13 +1,12 @@
 
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Adm
@@ -138,16 +137,43 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
-        
+
         ProdutosDAO produtosdao = new ProdutosDAO();
-        
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+        List<ProdutosDTO> lista = produtosdao.Listar();
+
+        ProdutosDTO produtoEncontrado = null;
+
+        for (ProdutosDTO p : lista) {
+            if (p.getId() == Integer.parseInt(id)) {
+                produtoEncontrado = p;
+                break;
+            }
+        }
+
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor preencha o cmapo de ID.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else if (id.matches(".*[a-zA-Z].*")) {
+            JOptionPane.showMessageDialog(null, "Por favor digite um ID de produto no campo de digitação.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            if (produtoEncontrado.getStatus().equalsIgnoreCase("Vendido")) {
+                JOptionPane.showMessageDialog(null, "Esse produto já foi vendido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else {
+                if (produtosdao.venderProduto(Integer.parseInt(id))) {
+                    JOptionPane.showMessageDialog(null, "Produto vendido com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Produto não encontrado ou erro na venda.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+                listarProdutos();
+            }
+        }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
+        vendasVIEW vendas = new vendasVIEW();
+        vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -203,25 +229,25 @@ public class listagemVIEW extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void listarProdutos() {
-    try {
-        ProdutosDAO produtosdao = new ProdutosDAO();
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
 
-        DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
-        model.setNumRows(0);
+            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+            model.setNumRows(0);
 
-        List<ProdutosDTO> listagem = produtosdao.Listar();
+            List<ProdutosDTO> listagem = produtosdao.Listar();
 
-        for (ProdutosDTO p : listagem) {
-            model.addRow(new Object[]{
-                p.getId(),
-                p.getNome(),
-                p.getValor(),
-                p.getStatus()
-            });
+            for (ProdutosDTO p : listagem) {
+                model.addRow(new Object[]{
+                    p.getId(),
+                    p.getNome(),
+                    p.getValor(),
+                    p.getStatus()
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-    } catch (Exception e) {
-        e.printStackTrace(); // mostra qualquer erro
     }
-}
 }
